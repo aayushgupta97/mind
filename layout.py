@@ -10,13 +10,19 @@ navbar = dbc.NavbarSimple(id="navbar",
                           sticky="top"
                           )
 
-
 input_box = dcc.Input(
-            id="text_field",
-            type="text",
-            placeholder="Enter text here...",
-        )
+    id="text_field",
+    type="text",
+    placeholder="Enter text here...",
+    maxLength=140,
+    size="60",
+    style={
+        "padding": 7
+    }
+)
 
 mkdown = html.Div(
     dcc.Markdown(id='image_container')
 )
+
+generate_button = dbc.Button(id="submit-button", children="Generate", color="primary", block=True)
