@@ -66,6 +66,6 @@ def fetch_image_urls(query: str, max_links_to_fetch: int, wd: webdriver, sleep_b
 
 def get_webdriver(query):
     wd = webdriver.Chrome(executable_path=DRIVER_PATH, chrome_options=options)
-    links = fetch_image_urls(query, 3, wd)
+    links = fetch_image_urls(query, 1, wd)
     wd.quit()
-    return links
+    return links[0]

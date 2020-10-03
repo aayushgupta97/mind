@@ -3,7 +3,7 @@ import dash
 from layout import *
 from scraper import *
 from dash.dependencies import Output, Input, State
-
+from rake import KeywordExtraction
 server = flask.Flask(__name__)
 
 app = dash.Dash(
@@ -53,9 +53,16 @@ app.layout = html.Div(
 def image_cb(clicks, value):
     try:
         if clicks and value:
+            links = list()
+            rake = KeywordExtraction(value)
+            keywords = rake.return_keywords_with_score_more_than_threshold()
             print(clicks, value)
-            links = get_webdriver(value)
+            for word in keywords:
+                link = get_webdriver(word)
+                links.append(link)
             # return "TEXT"
+            print("Keywords: ", keywords)
+            print("Links: ", links)
             images = ''.join([f"!['some text']({link})" for link in links])
             return images
         # return f"!['some text']({links[0]})"
