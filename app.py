@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import flask
 import dash
 from layout import *
@@ -69,6 +71,14 @@ app.layout = html.Div(
 #
 #             return images
 
+Grid = namedtuple('GRID', ['row', 'col'])
+grid = Grid(2, 2)
+import math
+
+
+def return_text_in_span(text):
+    return html.Span(text, style={"color": "blue"})
+
 
 @app.callback(Output("mydiv", "children"),
               [Input("submit-button", "n_clicks")],
@@ -81,15 +91,35 @@ def image_cb(clicks, value):
             rake = KeywordExtraction(value)
             keywords = rake.return_keywords_with_score_more_than_threshold()
             print(clicks, value)
+            print("Keywords: ", keywords)
+
             for word in keywords:
                 link = get_webdriver(word)
-                links.append(link)
+                links.append(dict(word=word, link=link))
             # return "TEXT"
-            print("Keywords: ", keywords)
             print("Links: ", links)
-            images = [dcc.Markdown(f"!['some text']({link})")for link in links]
 
-            return images
+            final = list()
+            final.append(dbc.Row(html.H1(f' "{return_text_in_span(value)}" ')))
+            # final.append(dbc.Row(dcc.Markdown(f'''### "{(value)}" ''')))
+
+            images = [dcc.Markdown(f"!['some text']({link['link']})")for link in links]
+
+            # final = [dbc.Row(image) for image in images]
+
+            row = list()
+            col = 1
+            for image in images:
+                if col > 3:
+                    final.append(dbc.Row(row))
+                    row, col = list(), 1
+                row.append(dbc.Col(image))
+                col += 1
+            if row:
+                final.append(dbc.Row(row))
+            print(final)
+
+            return final
 
         # return f"!['some text']({links[0]})"
     except TypeError:
@@ -98,3 +128,4 @@ def image_cb(clicks, value):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+# "I have a big house, a sport car and I see children eating ice cream"

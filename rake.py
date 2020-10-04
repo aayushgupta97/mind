@@ -6,7 +6,7 @@ from rake_nltk import Rake
 
 
 class KeywordExtraction:
-    THRESHOLD = 1
+    THRESHOLD = 3.5
 
     def __init__(self, text):
         self.r = Rake()
@@ -25,4 +25,11 @@ class KeywordExtraction:
 
 
 
-
+"""
+Sample Text lines
+I remember when I used to take my red car out for a ride in my sunflower fields. we had a huge villa where our black
+ horses, and cute corgi dogs running around. I also remember my beautiful wife and I under the starry nights in new york city.
+ 
+ 
+I remember when I used to take my red car out for a ride in my sunflower fields. We had a huge farm with a stable full of black horses.
+"""
