@@ -80,6 +80,12 @@ def return_text_in_span(text):
     return html.Span(text, style={"color": "blue"})
 
 
+def return_processed_text(text, keywords):
+    for keyword in keywords:
+        text = text.replace(keyword, f"**{keyword}**")
+    return text
+
+
 @app.callback(Output("mydiv", "children"),
               [Input("submit-button", "n_clicks")],
               [State("text_field", "value")]
@@ -100,8 +106,9 @@ def image_cb(clicks, value):
             print("Links: ", links)
 
             final = list()
-            final.append(dbc.Row(html.H1(f' "{return_text_in_span(value)}" ')))
+            # final.append(dbc.Row(html.H3(children=return_processed_text(value, keywords))))
             # final.append(dbc.Row(dcc.Markdown(f'''### "{(value)}" ''')))
+            final.append(dbc.Row(dcc.Markdown(f'''### {return_processed_text(value, keywords)} ''')))
 
             images = [dcc.Markdown(f"!['some text']({link['link']})")for link in links]
 
